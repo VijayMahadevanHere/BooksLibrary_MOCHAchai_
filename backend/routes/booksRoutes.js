@@ -4,17 +4,17 @@ const {
   publishBook,
   updateBook,
   deleteBook,
-  getBook
+  getBook,
 } = require("../controller/booksController");
-const {protect}=require('../middleware/authMiddleware.js')
+const { protect } = require("../middleware/authMiddleware.js");
 
-const router = express.Router(); 
+const router = express.Router();
 
-
-
-router.route("/").get(protect,getBooks).post(protect,publishBook);
-router.route("/:id").get(protect,getBook).put(protect,updateBook).delete(protect,deleteBook);
-
-
+router.route("/").get(protect, getBooks).post(protect, publishBook);
+router
+  .route("/:id")
+  .get(protect, getBook)
+  .put(protect, updateBook)
+  .delete(protect, deleteBook);
 
 module.exports = router;

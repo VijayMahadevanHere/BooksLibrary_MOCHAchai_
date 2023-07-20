@@ -1,7 +1,7 @@
 const { registerSchema, loginSchema } = require("../validation/userSchema");
 const bcrypt = require("bcryptjs");
 const asynchandler = require("express-async-handler");
-const generateToken=require('../jwt/generateToken')
+const generateToken = require("../jwt/generateToken");
 
 const users = []; //user collection
 
@@ -33,20 +33,19 @@ const registerUser = asynchandler(async (req, res) => {
         password: hashPassword,
       };
 
-      newUser.id = Math.floor(Math.random() * 100000) + Date.now(),
-      users.push(newUser); // Register the user.
+      (newUser.id = Math.floor(Math.random() * 100000) + Date.now()),
+        users.push(newUser); // Register the user.
       res.status(201).json({
-        id:newUser.id,
-        name:newUser.username,
-        email:newUser.email,
-        token:generateToken(newUser.id)
+        id: newUser.id,
+        name: newUser.username,
+        email: newUser.email,
+        token: generateToken(newUser.id),
       });
     } else {
-      res.status(409)
+      res.status(409);
       throw new Error({
         message: "Email is already registered. Please use a different email.",
-      })
-    
+      });
     }
   }
 });
@@ -64,20 +63,17 @@ const loginUser = asynchandler(async (req, res) => {
     throw new Error(error.message);
   } else {
     const matchedUser = users.find((user) => user.email === email);
-      
-   if (matchedUser && (await bcrypt.compare(password, matchedUser.password))) {
-   res.json(
-    {
-      id:matchedUser.id,
-      name:matchedUser.username,
-      email:matchedUser.email,
-      token:generateToken(matchedUser.id)
-    }
-   );  // Matched email & password.
+
+    if (matchedUser && (await bcrypt.compare(password, matchedUser.password))) {
+      res.json({
+        id: matchedUser.id,
+        name: matchedUser.username,
+        email: matchedUser.email,
+        token: generateToken(matchedUser.id),
+      }); // Matched email & password.
     } else {
-      res.status(401)
-      throw new Error("Invalid credentials. Login failed.")
-    
+      res.status(401);
+      throw new Error("Invalid credentials. Login failed.");
     }
   }
 });
@@ -87,7 +83,6 @@ const loginUser = asynchandler(async (req, res) => {
 //@access Private
 
 const getme = (req, res) => {
-  
   res.status(200).json(req.user);
 };
 
@@ -95,5 +90,5 @@ module.exports = {
   registerUser,
   loginUser,
   getme,
-  users
+  users,
 };

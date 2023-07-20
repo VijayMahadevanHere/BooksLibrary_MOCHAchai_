@@ -13,19 +13,19 @@ const getBooks = (req, res) => {
     throw new Error("User unAuhtorized");
   }
 };
+
 //@desc   Get book
 //@route  GET /api/books/:id
 //@access Private
 
 const getBook = (req, res) => {
-
   const bookId = parseInt(req.params.id);
 
   const bookIndex = books.findIndex((book) => book.id === bookId);
 
-  if (bookIndex=== -1) {
-    res.status(404)
-  throw new Error('Book not found')
+  if (bookIndex === -1) {
+    res.status(404);
+    throw new Error("Book not found");
   } else {
     res.status(200).json(books[bookIndex]);
   }
@@ -38,15 +38,15 @@ const getBook = (req, res) => {
 const publishBook = (req, res) => {
   const newBook = req.body;
 
-  const { error, value } = bookSchema.validate(newBook);
+  const { error, value } = bookSchema.validate(newBook); // Validate  inputs.
 
   if (error) {
     res.status(400);
     throw new Error(error.message);
   } else {
-    newBook.id =  Math.floor(Math.random() * 100000) + Date.now(),
-    newBook.author_id=req.user.id
-    books.push(newBook);
+    (newBook.id = Math.floor(Math.random() * 100000) + Date.now()), //Generate uuid
+      (newBook.author_id = req.user.id);
+    books.push(newBook); //create new document
     res.status(201).json(newBook);
   }
 };
@@ -60,29 +60,27 @@ const updateBook = (req, res) => {
   const updatedBook = req.body;
 
   const bookIndex = books.findIndex((book) => book.id === bookId);
-   
-  if (bookIndex=== -1) {
-    
-    res.status(404)
-    throw new Error('Book not found')
+
+  if (bookIndex === -1) {
+    res.status(404);
+    throw new Error("Book not found");
   } else {
     const { error, value } = bookSchema.validate(updatedBook); // Validate  inputs.
 
-    if (error) {  
-      res.status(400)
-      throw new Error( error.message )
-    
+    if (error) {
+      res.status(400);
+      throw new Error(error.message);
     } else {
-      const author_id=parseInt(books[bookIndex].author_id)
-      if(author_id===req.user.id){ //Make sure logged in user matches author.
+      const author_id = parseInt(books[bookIndex].author_id);
+      if (author_id === req.user.id) {
+        //Make sure logged in user matches author.
 
         books[bookIndex] = { ...books[bookIndex], ...updatedBook };
         res.status(200).json({ message: `Updated book ${bookId}` });
-      }else{
-        res.status(401)
-        throw new Error('Only author can update')
+      } else {
+        res.status(401);
+        throw new Error("Only author can update");
       }
-
     }
   }
 };
@@ -96,18 +94,18 @@ const deleteBook = (req, res) => {
 
   const bookIndex = books.findIndex((book) => book.id === bookId);
 
-  if (bookIndex=== -1) {
-    res.status(404)
-    throw new Error('Book not found')
+  if (bookIndex === -1) {
+    res.status(404);
+    throw new Error("Book not found");
   } else {
-    const author_id=parseInt(books[bookIndex].author_id)
-    if(author_id===req.user.id){ //Make sure logged in user matches author.
+    const author_id = parseInt(books[bookIndex].author_id);
+    if (author_id === req.user.id) {
+      //Make sure logged in user matches author.
       books.splice(bookIndex, 1);
       res.status(200).json({ message: `Deleted book ${bookId}` });
-    }else{
-      throw new Error('Only author can delete')
-    }   
-  
+    } else {
+      throw new Error("Only author can delete");
+    }
   }
 };
 
@@ -117,5 +115,5 @@ module.exports = {
   publishBook,
   updateBook,
   deleteBook,
-  books
+  books,
 };
