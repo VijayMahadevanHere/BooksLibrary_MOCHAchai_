@@ -1,17 +1,19 @@
 const express = require("express");
 const {
   getBooks,
-  setBook,
+  publishBook,
   updateBook,
   deleteBook,
+  getBook
 } = require("../controller/booksController");
+const {protect}=require('../middleware/authMiddleware.js')
 
 const router = express.Router(); 
 
 
 
-router.route("/").get(getBooks).post(setBook);
-router.route("/:id").put(updateBook).delete(deleteBook);
+router.route("/").get(protect,getBooks).post(protect,publishBook);
+router.route("/:id").get(protect,getBook).put(protect,updateBook).delete(protect,deleteBook);
 
 
 
