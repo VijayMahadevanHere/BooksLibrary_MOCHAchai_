@@ -16,7 +16,7 @@ const registerUser = asynchandler(async (req, res) => {
     username,
     email,
     password,
-  });
+  });                                                   //validate user inputs.
   if (error) {
     res.status(400);
     throw new Error(error.message);
@@ -24,7 +24,7 @@ const registerUser = asynchandler(async (req, res) => {
     let uniqueUser = users.every((user) => user.email !== email); // Check user Exist?
 
     if (uniqueUser) {
-      let salt = await bcrypt.genSalt(10); // Hash the password.
+      let salt = await bcrypt.genSalt(10); // Hash the password before storing.
       let hashPassword = await bcrypt.hash(password, salt);
 
       const newUser = {
@@ -43,9 +43,7 @@ const registerUser = asynchandler(async (req, res) => {
       });
     } else {
       res.status(409);
-      throw new Error({
-        message: "Email is already registered. Please use a different email.",
-      });
+      throw new Error( "Email is already registered. Please use a different email.");
     }
   }
 });

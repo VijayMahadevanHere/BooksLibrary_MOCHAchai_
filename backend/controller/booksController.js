@@ -1,5 +1,13 @@
 const bookSchema = require("../validation/bookSchema.js");
-const books = []; //books collection
+const books = [{
+  "genre": "politics",
+  "title": "this is title",
+  "author": "anil12eee",
+  "publishedYear": "2011",
+  "content": "abcdefg",
+  "id": 1689873949692,
+  "author_id": 1689873956192
+}]; //books collection
 
 //@desc   Get books
 //@route  GET /api/books

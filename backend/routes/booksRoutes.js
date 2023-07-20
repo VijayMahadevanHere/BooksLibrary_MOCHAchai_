@@ -10,7 +10,7 @@ const { protect } = require("../middleware/authMiddleware.js");
 
 const router = express.Router();
 
-router.route("/").get(protect, getBooks).post(protect, publishBook);
+router.route("/").get( protect,getBooks).post(protect, publishBook);
 router
   .route("/:id")
   .get(protect, getBook)
